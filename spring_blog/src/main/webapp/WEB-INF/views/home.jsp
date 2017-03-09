@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:choose>
 	<c:when test="${empty sessionScope.id}">
-		<c:set var="str">Francis 블로그</c:set>
+		<c:set var="str">Francis Blog</c:set>
 	</c:when>
 	
 	<c:otherwise>
