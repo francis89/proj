@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE  tiles-definitions PUBLIC 
+    "-//Aapche Software Foundation//DTD Tiles Configuration 2.0//EN" 
+    "http://tiles.apache.org/dtds/tiles-config_2_0.dtd"> 
+
+<tiles-definitions> 
+    
+	<definition name="/imgbbs/list" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example imgbbs 목록" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/imgbbs/list.jsp" /> 
+    </definition>   
+    <definition name="/imgbbs/create" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example imgbbs ID생성" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/imgbbs/createForm.jsp" /> 
+    </definition>   
+    <definition name="/imgbbs/read" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example imgbbs 조회" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/imgbbs/read.jsp" /> 
+    </definition>  
+    <definition name="/imgbbs/update" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example imgbbs 정보수정" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/imgbbs/updateForm.jsp" /> 
+    </definition>
+    <definition name="/imgbbs/reply" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example imgbbs 답변" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/imgbbs/replyForm.jsp" /> 
+    </definition>  
+    <definition name="/imgbbs/delete" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example imgbbs 삭제" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/imgbbs/deleteForm.jsp" /> 
+    </definition>  
+           
+</tiles-definitions> 

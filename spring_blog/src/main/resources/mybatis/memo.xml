@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memo">
+	<!-- delete -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM memo
+		WHERE memono = #{memono}
+	</delete>
+    
+
+    
+    <!-- update -->
+    <update id="update" parameterType="MemoDTO">
+        UPDATE memo 
+		SET title = #{title}, content = #{content} 
+		WHERE memono = #{memono} 
+    </update>
+
+ 	<!-- upViewcnt -->
+	 <update id="upViewcnt" parameterType="int">
+		UPDATE memo
+		SET viewcnt = viewcnt + 1
+		WHERE memono = #{memono}
+	 </update>
+    
+    <!-- read -->
+    <select id="read" resultType="MemoDTO" parameterType="int">
+        SELECT memono, title, content, to_char(wdate,'yyyy-mm-dd') wdate, viewcnt FROM memo 
+		WHERE memono = #{memono} 
+    </select>
+
+   <!-- create -->
+    <insert id="create" parameterType="MemoDTO">
+        INSERT INTO memo(memono, title, content, wdate) 
+		 VALUES(memo_seq.nextval, #{title}, #{content}, sysdate) 
+    </insert>
+	
+
+	<!-- total -->
+	<select id="total" parameterType="Map" resultType="int">
+		 SELECT COUNT(*)
+		 FROM memo 
+		<where>
+			<choose>
+				<when test="col == 'title'">
+					title like '%'||#{word}||'%'
+				</when>
+				<when test="col == 'content'">
+					content like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+	</select>
+
+	<!-- list -->
+	<select id="list" resultType="MemoDTO" parameterType="Map">
+		SELECT memono, title, to_char(wdate, 'yyyy-mm-dd') wdate, viewcnt, r
+ 		FROM(
+			 SELECT memono, title, wdate, viewcnt, rownum r
+			 FROM(
+				  SELECT memono, title, wdate, viewcnt
+				  FROM memo 
+		<where>
+			<if test="col=='title'">
+				title like '%'||#{word}||'%'
+			</if>
+			<if test="col=='content'">
+				content like '%'||#{word}||'%'
+			</if>
+		</where>
+			ORDER BY memono DESC 
+			) 
+		)                                                                           
+   <![CDATA[                                                                        
+   where r>=#{sno} and r<=#{eno}  
+   ]]>
+	</select>
+
+
+
+</mapper>

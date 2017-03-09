@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+	<!-- delete -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM member
+		WHERE id = #{id}
+	</delete>
+
+
+
+	<!-- getFname -->
+	<select id="getFname" parameterType="String" resultType="String">
+		SELECT
+		fname
+		FROM member
+		WHERE id = #{id}
+	</select>
+
+	<!-- update -->
+	<update id="update" parameterType="MemberDTO">
+		UPDATE member
+		SET tel = #{tel}, email = #{email}, zipcode = #{zipcode},
+		address1 = #{address1}, address2 = #{address2}, job = #{job}
+		WHERE id = #{id}
+	</update>
+
+
+	<!-- updatePw -->
+	<update id="updatePw" parameterType="Map">
+		UPDATE member
+		SET passwd = #{passwd}
+		WHERE id = #{id}
+	</update>
+
+	<!-- updateFile -->
+	<update id="updateFile" parameterType="Map">
+		UPDATE member
+		SET fname = #{fname}
+		WHERE id = #{id}
+	</update>
+
+
+
+	<!-- total -->
+	<select id="total" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM member
+		<where>
+			<choose>
+				<when test="col=='mname'">
+					mname like '%'||#{word}||'%'
+				</when>
+				<when test="col=='email'">
+					email like '%'||#{word}||'%'
+				</when>
+				<when test="col=='id'">
+					id like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+	</select>
+
+	<!-- list -->
+	<select id="list" resultType="MemberDTO" parameterType="Map">
+		SELECT id, mname, tel, email, zipcode, address1, address2, fname, r
+		FROM(
+		SELECT id, mname, tel, email, zipcode, address1, address2, fname,
+		rownum r
+		FROM(
+		SELECT id, mname, tel, email, zipcode, address1,
+		address2, fname
+		FROM member
+		<where>
+			<choose>
+				<when test="col=='mname'">
+					mname like '%'||#{word}||'%'
+				</when>
+				<when test="col=='email'">
+					email like '%'||#{word}||'%'
+				</when>
+				<when test="col=='id'">
+					id like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+		ORDER BY id ASC
+
+		)
+		)                                                                            
+	   <![CDATA[                                                                        
+	   where r>=#{sno} and r<=#{eno}  
+	   ]]>
+	</select>
+
+	<!-- read -->
+	<select id="read" resultType="MemberDTO" parameterType="int">
+		SELECT
+		id, mname, tel, email, zipcode, address1, address2,
+		job, mdate, fname
+		FROM member
+		WHERE id=#{id}
+	</select>
+
+	<!-- duplicateEmail -->
+	<select id="duplicateEmail" resultType="int" parameterType="String">
+		SELECT COUNT(email)
+		FROM member
+		WHERE email = #{email}
+	</select>
+
+	<!-- duplicateId -->
+	<select id="duplicateId" resultType="int" parameterType="String">
+		SELECT
+		COUNT(id)
+		FROM member
+		WHERE id = #{id}
+	</select>
+
+	<!-- create -->
+	<insert id="create" parameterType="MemberDTO">
+		INSERT INTO member(id, passwd,
+		mname, tel, email, zipcode,
+		address1, address2, job, mdate, fname,
+		grade )
+		VALUES(#{id}, #{passwd}, #{mname}, #{tel}, #{email},
+		#{zipcode},
+		#{address1}, #{address2}, #{job}, sysdate, #{fname}, 'H' )
+	</insert>
+
+
+	<!-- getGrade -->
+	<select id="getGrade" resultType="String" parameterType="String">
+		SELECT
+		grade
+		FROM member
+		WHERE id = #{id}
+
+	</select>
+
+	<!-- loginCheck -->
+	<select id="loginCheck" resultType="int" parameterType="Map">
+		SELECT
+		count(*)
+		FROM member
+		WHERE id = #{id} and passwd = #{passwd}
+	</select>
+
+</mapper>

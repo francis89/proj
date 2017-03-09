@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="imgbbs">
+	<!-- delete -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM imgbbs
+		WHERE
+		no = #{no}
+	</delete>
+
+	<!-- chechRefno -->
+	<select id="chechRefno" parameterType="int" resultType="int">
+		SELECT
+		count(refno) FROM imgbbs
+		WHERE refno = #{no}
+	</select>
+
+	<!-- update -->
+	<update id="update" parameterType="ImgbbsDTO">
+		UPDATE imgbbs 
+		SET name=#{name}, title=#{title}, content=#{content}, 
+		filename=#{filename} 
+		WHERE no = #{no} 
+	</update>
+
+	<!-- passCheck -->
+	<select id="passCheck" parameterType="map" resultType="int">
+		SELECT COUNT(no) as cnt
+		FROM imgbbs
+		<where>
+			no = #{no} AND
+			passwd = #{passwd}
+		</where>
+	</select>
+
+
+	<!-- addAnsnum -->
+	<update id="addAnsnum" parameterType="map">
+		UPDATE imgbbs
+		SET ansnum = ansnum + 1
+		<![CDATA[
+		  where grpno=#{grpno} AND ansnum > #{ansnum}
+		]]>
+	</update>
+
+	<!-- createReply -->
+	<insert id="createreply" parameterType="ImgbbsDTO">
+		INSERT INTO imgbbs(no, name, title,
+		content, passwd, wdate, grpno, indent, ansnum, refno,filename)
+		VALUES((SELECT NVL(MAX(no), 0) + 1 as no FROM imgbbs), #{name}, #{title},
+				#{content}, #{passwd}, sysdate,
+				#{grpno}, #{indent}+1, #{ansnum}+1, #{no}, #{filename})
+	</insert>
+
+
+	<!-- readReply -->
+	<select id="readReply" parameterType="int" resultType="ImgbbsDTO">
+		SELECT
+		no,title,grpno,indent,ansnum
+		FROM imgbbs
+		WHERE no = #{no}
+	</select>
+
+	<!-- create -->
+	<insert id="create" parameterType="ImgbbsDTO">
+		INSERT INTO imgbbs(no, name,
+		title, content, passwd, wdate,
+		filename, grpno )
+		VALUES((SELECT NVL(MAX(no), 0) + 1 as no FROM imgbbs),
+		#{name}, #{title}, #{content}, #{passwd}, sysdate, #{filename},
+		(SELECT NVL(MAX(grpno), 0) + 1 as grpno FROM imgbbs))
+	</insert>
+
+	<!-- imgRead -->
+	<select id="imgRead" resultType="Map" parameterType="int">
+		SELECT *
+		FROM
+		(
+		SELECT
+		lag(no,2) over (order by no) pre_no2,
+		lag(no,1) over
+		(order by no ) pre_no1,
+		no,
+		lead(no,1) over (order by no) nex_no1,
+		lead(no,2) over (order by no) nex_no2,
+		lag(filename,2) over (order by
+		no) pre_file2,
+		lag(filename,1) over (order by no ) pre_file1,
+		filename,
+		lead(filename,1) over (order by no) nex_file1,
+		lead(filename,2) over
+		(order by no) nex_file2
+		from (
+		SELECT no, filename
+		FROM imgbbs
+		ORDER BY no
+		DESC
+		)
+		)
+		<where>
+			no = #{no}
+		</where>
+	</select>
+
+	<!-- upViewcnt -->
+	<update id="upViewcnt" parameterType="int">
+		UPDATE imgbbs
+		SET viewcnt =
+		viewcnt + 1
+		WHERE no = #{no}
+	</update>
+
+	<!-- read -->
+	<select id="read" resultType="ImgbbsDTO" parameterType="int">
+		SELECT
+		no, name, title, content, viewcnt,
+		to_char(wdate, 'yyyy-mm-dd') wdate,
+		filename
+		FROM imgbbs
+		WHERE no = #{no}
+	</select>
+
+	<!-- total -->
+	<select id="total" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM imgbbs
+		<where>
+			<choose>
+				<when test="col=='name'">
+					name like '%'||#{word}||'%'
+				</when>
+				<when test="col=='title'">
+					title like '%'||#{word}||'%'
+				</when>
+				<when test="col=='content'">
+					content like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+	</select>
+
+	<!-- list -->
+	<select id="list" resultType="ImgbbsDTO" parameterType="Map">
+		SELECT no, name, title, viewcnt, to_char(wdate, 'yyyy-mm-dd') wdate,
+		filename, indent, r
+		FROM(
+		SELECT no, name, title, viewcnt, wdate,
+		filename, indent, rownum r
+		FROM(
+		SELECT no, name, title, viewcnt, wdate,
+		filename, indent
+		FROM imgbbs
+		<where>
+			<choose>
+				<when test="col=='name'">
+					name like '%'||#{word}||'%'
+				</when>
+				<when test="col=='title'">
+					title like '%'||#{word}||'%'
+				</when>
+				<when test="col=='content'">
+					content like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+		ORDER BY grpno DESC, ansnum ASC
+
+		)
+		)                                                                            
+   <![CDATA[                                                                        
+   where r>=#{sno} and r<=#{eno}  
+   ]]>
+	</select>
+
+
+
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE  tiles-definitions PUBLIC 
+    "-//Aapche Software Foundation//DTD Tiles Configuration 2.0//EN" 
+    "http://tiles.apache.org/dtds/tiles-config_2_0.dtd"> 
+
+<tiles-definitions> 
+     
+    
+	<definition name="/member/list" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member 목록" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/list.jsp" /> 
+    </definition>   
+    <definition name="/member/agree" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member 약관 동의서" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/agreement.jsp" /> 
+    </definition>   
+    <definition name="/member/create" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member ID생성" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/createForm.jsp" /> 
+    </definition>   
+    <definition name="/member/agree" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member agreement" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/agreement.jsp" /> 
+    </definition>   
+    <definition name="/member/prcreateProc" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member 중복에러" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/prcreateProc.jsp" /> 
+    </definition>   
+    <definition name="/member/id_Form" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member ID중복확인 폼" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/id_Form.jsp" /> 
+    </definition>  
+    <definition name="/member/id_Proc" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member ID중복확인" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/id_Proc.jsp" /> 
+    </definition>  
+    <definition name="/member/email_Form" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member E-Mail중복확인 폼" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/email_Form.jsp" /> 
+    </definition>  
+    <definition name="/member/email_Proc" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member E-Mail중복확인" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/email_Proc.jsp" /> 
+    </definition>  
+    <definition name="/member/login" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member 로그인" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/loginForm.jsp" /> 
+    </definition>  
+    <definition name="/member/logout" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member 로그아웃" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/logout.jsp" /> 
+    </definition>  
+    <definition name="/member/read" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member 조회" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/read.jsp" /> 
+    </definition>  
+    <definition name="/member/update" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member 정보수정" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/updateForm.jsp" /> 
+    </definition>
+    <definition name="/member/updateFile" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member 사진수정" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/updateFileForm.jsp" /> 
+    </definition>
+    <definition name="/member/updatePw" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member 비밀번호수정" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/updatePwForm.jsp" /> 
+    </definition>
+    <definition name="/member/delete" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example member 삭제" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/member/deleteForm.jsp" /> 
+    </definition>  
+    
+   
+           
+   
+</tiles-definitions> 

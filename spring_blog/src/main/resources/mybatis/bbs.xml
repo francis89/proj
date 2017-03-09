@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bbs">
+	<!-- delete -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM bbs
+		WHERE
+		bbsno = #{bbsno}
+	</delete>
+
+	<!-- chechRefno -->
+	<select id="chechRefno" parameterType="int" resultType="int">
+		SELECT
+		count(refno) FROM bbs
+		WHERE refno = #{bbsno}
+	</select>
+	<!-- readReply -->
+	<select id="readReply" parameterType="int" resultType="BbsDTO">
+		SELECT
+		bbsno,title,grpno,indent,ansnum
+		FROM bbs
+		WHERE bbsno = #{bbsno}
+	</select>
+
+	<!-- addAnsnum -->
+	<update id="addAnsnum" parameterType="map">
+		UPDATE bbs
+		SET ansnum = ansnum + 1
+		<where>
+			grpno=#{grpno} AND ansnum > #{ansnum}
+		</where>
+	</update>
+
+	<!-- createReply -->
+	<insert id="reply" parameterType="BbsDTO">
+		INSERT INTO bbs(bbsno, wname,
+		title,
+		content, passwd, wdate, grpno, indent, ansnum, refno, filename, filesize)
+		VALUES((SELECT NVL(MAX(bbsno), 0) + 1 as bbsno FROM bbs), #{wname},
+		#{title},
+		#{content}, #{passwd}, sysdate,
+		#{grpno}, #{indent}+1, #{ansnum}+1, #{bbsno}, #{filename}, #{filesize})
+	</insert>
+	<!-- passCheck -->
+	<select id="passCheck" parameterType="map" resultType="int">
+		SELECT COUNT(bbsno) as cnt
+		FROM bbs
+		<where>
+			bbsno = #{bbsno} AND
+			passwd = #{passwd}
+		</where>
+	</select>
+	<!-- update -->
+	<update id="update" parameterType="BbsDTO">
+		UPDATE bbs
+		SET wname = #{wname},
+		title = #{title},
+		content = #{content}
+		<if test="filesize > 0">
+			,filename = #{filename} ,
+			filesize = #{filesize}
+		</if>
+		<where>
+			bbsno = #{bbsno}
+		</where>
+	</update>
+
+	<!-- create -->
+	<insert id="create" parameterType="BbsDTO">
+		INSERT INTO bbs(bbsno, wname,
+		title, content, passwd,
+		wdate, grpno,filename, filesize)
+		VALUES((SELECT NVL(MAX(bbsno), 0) + 1 as bbsno FROM bbs),
+		#{wname}, #{title}, #{content}, #{passwd}, sysdate,
+		(SELECT NVL(MAX(grpno), 0) + 1 as grpno FROM bbs), #{filename}, #{filesize})
+	</insert>
+	<!-- upViewcnt -->
+	<update id="upViewcnt" parameterType="int">
+		UPDATE bbs
+		SET viewcnt =
+		viewcnt +1
+		WHERE bbsno = #{bbsno}
+	</update>
+
+	<!-- read -->
+	<select id="read" resultType="BbsDTO" parameterType="int">
+		SELECT
+		bbsno, wname, title, content, viewcnt, wdate,filename, filesize
+		FROM
+		bbs
+		WHERE
+		bbsno = #{bbsno}
+	</select>
+
+	<!-- total -->
+	<select id="total" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM bbs
+		<where>
+			<choose>
+				<when test="col == 'wname'">
+					wname like '%'||#{word}||'%'
+				</when>
+				<when test="col == 'title'">
+					title like '%'||#{word}||'%'
+				</when>
+				<when test="col == 'content'">
+					content like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+	</select>
+
+	<!-- list -->
+	<select id="list" resultType="BbsDTO" parameterType="Map">
+		SELECT bbsno, wname, title, viewcnt, wdate,grpno, indent,
+		ansnum,filename, r
+		FROM (
+		SELECT bbsno, wname, title, viewcnt,
+		wdate,grpno, indent, ansnum,filename,
+		rownum as r
+		FROM (
+		SELECT bbsno,
+		wname, title, viewcnt, wdate, grpno, indent, ansnum,filename
+		FROM bbs
+		<where>
+			<choose>
+				<when test="col=='wname'">
+					wname like '%'||#{word}||'%'
+				</when>
+				<when test="col=='title'">
+					title like '%'||#{word}||'%'
+				</when>
+				<when test="col=='content'">
+					content like '%'||#{word}||'%'
+				</when>
+			</choose>
+		</where>
+		ORDER BY grpno DESC, ansnum ASC
+
+		)
+		)                                                                            
+   <![CDATA[                                                                        
+   where r>=#{sno} and r<=#{eno}  
+   ]]>
+	</select>
+
+
+
+</mapper>

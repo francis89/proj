@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE  tiles-definitions PUBLIC 
+    "-//Aapche Software Foundation//DTD Tiles Configuration 2.0//EN" 
+    "http://tiles.apache.org/dtds/tiles-config_2_0.dtd"> 
+
+<tiles-definitions> 
+    
+	<definition name="/cal/create" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example calendar 목록" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/calendar/createForm.jsp" /> 
+    </definition>   
+	<definition name="/cal/list" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example calendar 목록" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/calendar/list.jsp" /> 
+    </definition>   
+	<definition name="/cal/delete" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example calendar 목록" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/calendar/deleteForm.jsp" /> 
+    </definition>   
+   
+    <definition name="/cal/update" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example calendar 정보수정" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/calendar/updateForm.jsp" /> 
+    </definition>
+    <definition name="/cal/calendar" extends="main"> 
+        <put-attribute name="title" value="Spring3.2 Example calendar 정보수정" ></put-attribute> 
+        <put-attribute name="body" value="/WEB-INF/views/calendar/calendar.jsp" /> 
+    </definition>
+    
+           
+</tiles-definitions> 
